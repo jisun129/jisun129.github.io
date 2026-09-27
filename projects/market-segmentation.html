@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Estimating the geography of customer segments and building regional market profiles from complementary datasets.">
+  <meta name="theme-color" content="#15233b">
+  <title>Tobacco Market Potential Analysis | Jisun Kim</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%2315233b%22/%3E%3Ctext%20x%3D%2220%22%20y%3D%2227%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2222%22%20fill%3D%22%23fff%22%3EJK%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/case-studies.css">
+  <script src="../assets/portfolio-config.js" defer></script>
+  <script src="../assets/portfolio.js" defer></script>
+</head>
+<body class="case-study" data-root="../">
+<a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header"><div class="wrap header-inner">
+      <a class="brand" href="../index.html" aria-label="Jisun Kim, home"><span class="brand-mark" aria-hidden="true">JK</span><span>Jisun Kim<small>Data Scientist</small></span></a>
+      <nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Home</a><a href="../work.html">Work</a><a href="../education.html">Education</a><a href="../projects.html" aria-current="page">Projects</a></nav>
+    </div></header>
+<main id="main" class="wrap">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../projects.html">Projects</a><span aria-hidden="true">/</span><span>Tobacco Market Potential Analysis</span></nav>
+      <header class="detail-heading case-heading">
+        <div class="eyebrow">Machine learning / Geographic profiling</div>
+        <h1>Tobacco Market Potential Analysis</h1><p>Estimating the geography of customer segments and building regional market profiles from complementary datasets.</p>
+        <span class="status">Professional work · OpenMate</span>
+      </header>
+      <dl class="detail-meta case-meta">
+        <div><dt>My role</dt><dd>Sole analyst</dd></div>
+        <div><dt>Period</dt><dd>Aug 2021 – Dec 2021</dd></div>
+        <div><dt>Coverage</dt><dd>Nationwide · South Korea</dd></div>
+      </dl>
+      <dl class="case-facts" aria-label="Project scope"><div><dt>Segment framework</dt><dd>5 main segments</dd></div><div><dt>Segment detail</dt><dd>11 subsegments</dd></div><div><dt>Market description</dt><dd>6 analytical layers</dd></div><div><dt>Deliverables</dt><dd>Report · Service updates</dd></div></dl>
+      <div class="case-layout">
+        <article class="case-article" aria-label="Project case study">
+<section id="overview"><div class="section-number">01 / Overview</div><h2>Connect customer segments to geography</h2>
+  <p>An international tobacco company had a detailed customer segmentation framework, but its usage-and-attitudes survey did not include customers’ residential locations. A separate credit-card consumption dataset included postal-code information, but used a different set of segments.</p>
+  <p>As the sole analyst, I developed a method to estimate the geographic distribution of the client’s segments and combined those estimates with sales, demographic, economic, and location data to describe regional markets.</p>
+  <div class="case-two-up"><div><span class="mini-label">Task 1</span><h3>Estimate segment distribution</h3><p>Learn the relationship between shared consumption features and the client’s segment labels, then translate the results into postal-code estimates.</p></div>
+    <div><span class="mini-label">Task 2</span><h3>Build regional market profiles</h3><p>Develop six analytical layers that could be combined into detailed market groups and regrouped for different business questions.</p></div></div>
+  <p>The deliverables were an analysis report and enhancements to an existing web service. My responsibility covered the analytical workflow, modeling, interpretation, and geographic outputs.</p>
+</section>
+<section id="transfer"><div class="section-number">02 / Segment estimation</div><h2>Bridge two different segment definitions</h2>
+  <p>The central challenge was to relate the client’s five main segments and eleven subsegments to the credit-card company’s segments. I used common consumption and demographic features to estimate a mapping between them.</p>
+  <div class="table-scroll"><table class="case-table"><caption>Complementary information in the two datasets</caption><thead><tr><th scope="col">Dataset</th><th scope="col">What it contributed</th><th scope="col">Key gap</th></tr></thead><tbody>
+    <tr><th scope="row">Client survey</th><td>Client segment labels, product preferences, spending patterns, and demographics.</td><td>No residential geography.</td></tr>
+    <tr><th scope="row">Credit-card consumption data</th><td>Consumption profiles aggregated by the card company’s segments, with postal-code distribution.</td><td>Different segment definitions.</td></tr>
+  </tbody></table></div>
+<figure class="case-figure">
+      <a href="../assets/case-studies/tobacco-segment-transfer.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Survey features and labels train a model, which predicts client segments in a second dataset and maps them to its existing segments (new tab)">
+        <img src="../assets/case-studies/tobacco-segment-transfer.webp" width="1754" height="490" alt="Survey features and labels train a model, which predicts client segments in a second dataset and maps them to its existing segments" loading="eager" decoding="async">
+      </a>
+      <figcaption>The segment-transfer workflow: learn from labeled survey data, apply the model to consumption data, then estimate the relationship between the two segment systems. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  <h3>1. Align the shared features</h3>
+  <p>I aligned product attributes, demographic variables, and major spending categories. Some spending fields were recorded as ratios in one dataset and amounts in the other. I represented selected categories with five Jenks natural-breaks grades as a practical alignment step.</p>
+  <p>The preprocessing also included outlier handling, min–max scaling of selected numeric variables, and encoding of categorical features. These choices made the modeling inputs consistent; matching feature formats alone does not guarantee that the two populations are comparable.</p>
+  <h3>2. Train and interpret the segment classifier</h3>
+  <p>I trained a LightGBM classifier on the survey’s client-segment labels, using a 70:30 training/test split and Bayesian hyperparameter optimization. SMOTE-NC was applied to the training portion to create synthetic minority-class examples for mixed numeric and categorical data.</p>
+  <p>I examined gain-based feature importance and SHAP values to explain which inputs contributed to segment predictions.</p>
+  <details class="method-details"><summary>View an example of model interpretation</summary>
+<figure class="case-figure">
+      <a href="../assets/case-studies/tobacco-shap-explanation.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: SHAP summary plot showing feature contributions for one customer segment (new tab)">
+        <img src="../assets/case-studies/tobacco-shap-explanation.webp" width="1112" height="660" alt="SHAP summary plot showing feature contributions for one customer segment" loading="lazy" decoding="async">
+      </a>
+      <figcaption>An original SHAP example for one segment. The plot explains the model’s predictions; it does not establish causal effects or predictive accuracy. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  </details>
+  <h3>3. Translate predictions into postal-code estimates</h3>
+  <p>After applying the model to the consumption data, each record had both a predicted client segment and an existing card-company segment. I calculated the predicted client-segment composition within each card segment, then applied those proportions to card-segment counts by postal code.</p>
+  <div class="case-formula" role="note"><strong>Estimated client-segment count in a postal code</strong><span>Sum across card segments of:<br>local card-segment count × estimated client-segment share within that card segment</span></div>
+  <p>This produced a many-to-many mapping between segment systems and an estimated geographic composition. I delivered the results in CSV and map formats.</p>
+  <p class="case-note">These outputs are aggregate estimates. They do not identify individual survey respondents’ addresses or provide directly observed segment labels for each postal code.</p>
+</section>
+<section id="profiles"><div class="section-number">03 / Regional profiles</div><h2>Use six analytical layers to describe each market</h2>
+  <p>The client needed detailed market groups that could also be regrouped for different questions. I separated the analysis into six dimensions, keeping the meaning of each layer visible before combining the results.</p>
+  <div class="table-scroll"><table class="case-table"><caption>Six dimensions and their analytical methods</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Data and method</th></tr></thead><tbody>
+    <tr><th scope="row">Sales trends</th><td>Monthly regional sales, October 2016–August 2021; scaled time series and time-series k-means, with the elbow method guiding the number of clusters.</td></tr>
+    <tr><th scope="row">New-product concentration</th><td>September 2020–August 2021 sales; a location quotient comparing the regional new-product sales share with the national share.</td></tr>
+    <tr><th scope="row">Population</th><td>Resident and floating population and related demographic characteristics; UMAP followed by a Gaussian mixture model (GMM).</td></tr>
+    <tr><th scope="row">Economic characteristics</th><td>Income, card spending, and housing-price variables; UMAP followed by GMM.</td></tr>
+    <tr><th scope="row">Location characteristics</th><td>Commercial establishments, residential buildings, and public transport; UMAP followed by GMM.</td></tr>
+    <tr><th scope="row">Customer composition</th><td>Estimated client-segment proportions from Task 1; UMAP followed by GMM.</td></tr>
+  </tbody></table></div>
+  <p>The inputs combined monthly store sales, NICE demographic and economic aggregates, OpenMate spatial data, and the segment estimates from Task 1.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/tobacco-sales-trends.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Four time-series groups with individual regional sales curves and a red representative trend for each group (new tab)">
+        <img src="../assets/case-studies/tobacco-sales-trends.webp" width="975" height="455" alt="Four time-series groups with individual regional sales curves and a red representative trend for each group" loading="lazy" decoding="async">
+      </a>
+      <figcaption>Examples of distinct regional sales trajectories. Scaling supported comparison of the patterns over time. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  <h3>Keep each layer interpretable</h3>
+  <p>For the four GMM layers, I handled missing values and outliers, scaled the inputs, and used UMAP to reduce dimensionality before clustering. I interpreted the resulting groups using their relative feature profiles.</p>
+  <p>The new-product layer used a location quotient rather than a clustering model. A value above 1 indicates a larger new-product share of sales than the national share; it does not necessarily indicate greater absolute sales volume.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/tobacco-economic-profiles.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Map of regional groups from the economic-characteristics clustering layer (new tab)">
+        <img src="../assets/case-studies/tobacco-economic-profiles.webp" width="1920" height="1080" alt="Map of regional groups from the economic-characteristics clustering layer" loading="lazy" decoding="async">
+      </a>
+      <figcaption>An example of one analytical layer: regions grouped by economic characteristics. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  <h3>Combine the layers into detailed market groups</h3>
+  <p>I cross-classified the six layer outputs to create detailed regional profiles. Keeping the component labels made it possible to regroup areas by the dimensions relevant to a particular analysis.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/tobacco-combined-market-profiles.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Final map of detailed regional market groups after combining the analytical layers (new tab)">
+        <img src="../assets/case-studies/tobacco-combined-market-profiles.webp" width="1123" height="628" alt="Final map of detailed regional market groups after combining the analytical layers" loading="lazy" decoding="async">
+      </a>
+      <figcaption>Combined market profiles from the original project results. Groups describe shared attributes; geographic contiguity was not an explicit constraint. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+</section>
+<section id="delivery"><div class="section-number">04 / Delivery</div><h2>Make the analysis usable beyond the model</h2>
+  <div class="delivery-grid"><div><h3>Geographic estimates</h3><p>Client-segment distributions by postal code, delivered as tabular data and maps.</p></div>
+    <div><h3>Regional profiles</h3><p>Sales-pattern groups, relative new-product concentration, and four attribute-based clustering layers.</p></div>
+    <div><h3>Reporting and service updates</h3><p>An analysis report and geographic outputs for enhancements to the client’s existing web service.</p></div></div>
+  <p>The project linked a customer framework without residential locations to a geographic dataset and then to a reusable set of regional descriptions. The key analytical contribution was making the mapping between datasets explicit and preserving the meaning of each market dimension.</p>
+</section>
+<section id="considerations" class="case-considerations"><h2>Interpretation and limitations</h2>
+  <ul class="case-list"><li><strong>Transfer across datasets:</strong> estimates assume that relationships learned from survey responses remain useful in aggregated consumption data and across regions.</li>
+    <li><strong>Feature alignment:</strong> matching spending grades is a practical approximation when the original measurement scales differ.</li>
+    <li><strong>Evaluation scope:</strong> the original notes record a 70:30 split, but do not specify a cross-validation fold scheme or report held-out classification metrics.</li>
+    <li><strong>Market groups:</strong> profiles depend on the selected features and modeling choices. The delivered maps do not establish a measured marketing or sales uplift.</li></ul>
+</section>
+
+          <nav class="case-next" aria-label="More projects"><a class="back-link" href="../projects.html">← All projects</a><a class="text-link" href="retail-catchments.html">Hypermarket Catchment &amp; Market Analysis →</a></nav>
+        </article>
+        <aside class="case-sidebar" aria-label="Project navigation and tools">
+          <nav aria-label="On this page"><h2>On this page</h2><ol><li><a href="#overview">Overview &amp; my role</a></li><li><a href="#transfer">Segment estimation</a></li><li><a href="#profiles">Regional profiles</a></li><li><a href="#delivery">Delivery</a></li><li><a href="#considerations">Interpretation</a></li></ol></nav>
+          <hr class="subtle-divider"><h2>Methods &amp; tools</h2><div class="chips"><span class="chip">Python</span><span class="chip">LightGBM</span><span class="chip">SMOTE-NC</span><span class="chip">SHAP</span><span class="chip">Jenks breaks</span><span class="chip">Time-series k-means</span><span class="chip">UMAP</span><span class="chip">GMM</span><span class="chip">R</span><span class="chip">QGIS</span></div>
+          <a class="button repo-button" data-repo-button="market-segmentation" href="../projects.html" target="_blank" rel="noopener noreferrer" hidden>View GitHub repository ↗</a>
+          <a class="text-link" href="../work.html">Work experience ↗</a>
+          <a class="text-link" href="https://erratic-quit-c88.notion.site/Tobacco-Market-Potential-Analytics-12dab53374b24ef6bb82e7559e213a29?pvs=143" target="_blank" rel="noopener noreferrer">Original Notion notes ↗</a>
+          <p class="case-source">Figures from my original project documentation.</p>
+        </aside>
+      </div>
+    </main><footer class="site-footer"><div class="wrap footer-inner"><span>© 2026 Jisun Kim</span><span>Data science. Thoughtfully applied.</span><a href="../index.html#contact">Get in touch ↗</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Leading the analytics behind a service that connects store catchments, neighborhood characteristics, and customer activity.">
+  <meta name="theme-color" content="#15233b">
+  <title>Hypermarket Catchment &amp; Market Analysis | Jisun Kim</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%2315233b%22/%3E%3Ctext%20x%3D%2220%22%20y%3D%2227%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2222%22%20fill%3D%22%23fff%22%3EJK%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/case-studies.css">
+  <script src="../assets/portfolio-config.js" defer></script>
+  <script src="../assets/portfolio.js" defer></script>
+</head>
+<body class="case-study" data-root="../">
+<a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header"><div class="wrap header-inner">
+      <a class="brand" href="../index.html" aria-label="Jisun Kim, home"><span class="brand-mark" aria-hidden="true">JK</span><span>Jisun Kim<small>Data Scientist</small></span></a>
+      <nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Home</a><a href="../work.html">Work</a><a href="../education.html">Education</a><a href="../projects.html" aria-current="page">Projects</a></nav>
+    </div></header>
+<main id="main" class="wrap">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../projects.html">Projects</a><span aria-hidden="true">/</span><span>Hypermarket Catchment &amp; Market Analysis</span></nav>
+      <header class="detail-heading case-heading">
+        <div class="eyebrow">Geospatial analytics / Service delivery</div>
+        <h1>Hypermarket Catchment &amp; Market Analysis</h1><p>Leading the analytics behind a service that connects store catchments, neighborhood characteristics, and customer activity.</p>
+        <span class="status">Professional work · OpenMate</span>
+      </header>
+      <dl class="detail-meta case-meta">
+        <div><dt>My role</dt><dd>Analysis Project Leader</dd></div>
+        <div><dt>Period</dt><dd>Aug 2022 – Jul 2023</dd></div>
+        <div><dt>Coverage</dt><dd>Nationwide · South Korea</dd></div>
+      </dl>
+      <dl class="case-facts" aria-label="Project scope"><div><dt>Client network</dt><dd>240 stores</dd></div><div><dt>Service design</dt><dd>≈100 tables</dd></div><div><dt>Spatial levels</dt><dd>Block · Zone · Store</dd></div><div><dt>Channel views</dt><dd>4 channels</dd></div></dl>
+      <div class="case-layout">
+        <article class="case-article" aria-label="Project case study">
+<section id="overview"><div class="section-number">01 / Overview</div><h2>From store totals to local market context</h2>
+  <p>A Korean hypermarket company with 240 stores needed a clearer view of the neighborhoods around each store. Its existing reporting focused on store totals and approximate delivery areas, leaving limited visibility into where customers lived and how local markets differed.</p>
+  <p>I led the analytical work for a web service that connected network-based catchments, delivery boundaries, neighborhood characteristics, and customer transactions. The service supported analysis by block, catchment area, and store, across daily, monthly, and yearly views.</p>
+  <h3>My contribution</h3>
+  <ul class="case-list"><li><strong>Defined the analytical service.</strong> Planned features and analysis logic, worked with the business team, and coordinated analysts as the Analysis Project Leader.</li>
+    <li><strong>Designed the data foundation.</strong> Specified approximately 100 service tables and the processing and aggregation logic used by developers and the database specialist.</li>
+    <li><strong>Prepared recurring operations.</strong> Developed analytical code, tuned processing for runtime efficiency and more reliable reruns, and configured batch jobs and cron schedules.</li></ul>
+  <p class="case-note">I worked within a seven-person team: one project manager, two analysts, two developers, one database specialist, and one web designer.</p>
+</section>
+<section id="catchments"><div class="section-number">02 / Geographic foundation</div><h2>Define the area before measuring the market</h2>
+  <p>I created two complementary types of zones: street-network catchments to describe access to a store, and delivery zones based on the postal codes served by that store.</p>
+  <h3>Walking catchments from the street network</h3>
+  <ol class="method-steps"><li><strong>Locate each store.</strong> Clean and geocode store addresses, then retrieve the surrounding OpenStreetMap walking network with OSMnx.</li>
+    <li><strong>Find the reachable network.</strong> Use NetworkX to select connected nodes and edges within 5, 10, 20, 30, and 60 minutes, assuming a walking speed of 5 km/h. The service also accepts user-defined time or distance inputs.</li>
+    <li><strong>Create analysis polygons.</strong> Buffer and combine the reachable network, then subtract inner polygons to form non-overlapping rings.</li></ol>
+<figure class="case-figure case-figure-compact">
+      <a href="../assets/case-studies/hypermarket-walking-catchments.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Colored walking catchment rings surrounding a hypermarket on a street map (new tab)">
+        <img src="../assets/case-studies/hypermarket-walking-catchments.webp" width="697" height="609" alt="Colored walking catchment rings surrounding a hypermarket on a street map" loading="eager" decoding="async">
+      </a>
+      <figcaption>Walking catchments generated from the street network. Travel times use a fixed walking-speed assumption; they do not represent traffic-aware driving times. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  <details class="method-details"><summary>Handling sparse road networks</summary><p>In areas with a sparse retrieved network, I used a density-based rule to add a convex hull around reachable network points to the buffered geometry. This produced a usable analysis polygon where network buffers alone were fragmented.</p><p>The resulting boundary is a geometric approximation: the hull can include gaps between reachable streets. Network completeness and the buffer settings therefore affect the estimated catchment.</p></details>
+  <h3>Delivery zones and a common block layer</h3>
+  <p>I joined each store’s delivery postal codes to boundary polygons, applied a 1 m buffer, and dissolved them into a store-level delivery zone.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/hypermarket-delivery-zones.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Separate postal-code polygons combined into one delivery-zone boundary (new tab)">
+        <img src="../assets/case-studies/hypermarket-delivery-zones.webp" width="710" height="344" alt="Separate postal-code polygons combined into one delivery-zone boundary" loading="lazy" decoding="async">
+      </a>
+      <figcaption>Delivery zones were assembled from the postal codes served by each store. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+  <p>Both types of zones were mapped to OpenMate’s proprietary block polygons, which became the common unit for data aggregation. I excluded intersections covering 10% or less of a block and assigned blocks with multiple candidate zones to the zone with the largest overlap.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/hypermarket-block-mapping.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: A catchment polygon overlaid on blocks, with qualifying blocks highlighted after spatial assignment (new tab)">
+        <img src="../assets/case-studies/hypermarket-block-mapping.webp" width="876" height="450" alt="A catchment polygon overlaid on blocks, with qualifying blocks highlighted after spatial assignment" loading="lazy" decoding="async">
+      </a>
+      <figcaption>A consistent block-to-zone mapping allowed demographic and transaction data to be aggregated into the same geographic framework. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+</section>
+<section id="market"><div class="section-number">03 / Market context</div><h2>Describe the people and places around each store</h2>
+  <p>I combined OpenMate spatial data and public datasets into four categories. Spatial joins mapped building and point data to blocks before aggregation to catchments and stores.</p>
+  <div class="table-scroll"><table class="case-table"><caption>Market indicators used in the service</caption><thead><tr><th scope="col">Category</th><th scope="col">Measures</th></tr></thead><tbody>
+    <tr><th scope="row">Demographic</th><td>Resident population by age and housing type; employment population.</td></tr>
+    <tr><th scope="row">Economic</th><td>Apartment and individual-house prices.</td></tr>
+    <tr><th scope="row">Commercial</th><td>Business density, openings, closures, and growth.</td></tr>
+    <tr><th scope="row">Transportation</th><td>Public transport access, including coverage based on bus-stop and subway-station buffers.</td></tr>
+  </tbody></table></div>
+  <p>For missing resident-population values, the analysis used a decision tree regressor with household and housing predictors, as well as averages from blocks within the same census tract. These estimates supported a more complete geographic dataset.</p>
+<figure class="case-figure">
+      <a href="../assets/case-studies/hypermarket-market-dashboard.webp" target="_blank" rel="noopener noreferrer" aria-label="Open full-size figure: Service dashboard showing resident population, housing types, and age-group counts for a selected area (new tab)">
+        <img src="../assets/case-studies/hypermarket-market-dashboard.webp" width="1887" height="617" alt="Service dashboard showing resident population, housing types, and age-group counts for a selected area" loading="lazy" decoding="async">
+      </a>
+      <figcaption>An example from the delivered service: population and housing indicators for a selected area. The original interface is in Korean. <span class="figure-hint">Select the image for a larger view.</span></figcaption>
+    </figure>
+</section>
+<section id="customers"><div class="section-number">04 / Customer analytics</div><h2>Connect market size with customer activity</h2>
+  <p>The client’s existing penetration measure divided customer counts by household counts. I redesigned the measure around resident population and age groups, making the population basis explicit.</p>
+  <div class="case-formula" role="note"><strong>Customer penetration</strong><span>Customers in the selected area and age group<br>÷ resident population in that area and age group</span></div>
+  <p>For daily customer counts, I counted each customer once per date and calculated age at the transaction date. Online orders were assigned to blocks and catchments using each store’s customer delivery addresses.</p>
+  <ul class="case-list"><li><strong>Sales and orders:</strong> account for cancellations when calculating net sales and net order counts.</li>
+    <li><strong>Customer and basket measures:</strong> calculate spending per customer and average order value.</li>
+    <li><strong>Product mix:</strong> summarize leading SKUs overall and within age groups.</li>
+    <li><strong>Channel views:</strong> support online, offline, integrated, and project-defined omnichannel analysis.</li></ul>
+  <p class="case-note"><strong>Service definition:</strong> “Omnichannel” identified customers who purchased both online and offline at the same store on the same day. This was a specific operational rule for this project.</p>
+</section>
+<section id="peers"><div class="section-number">05 / Store comparison</div><h2>Put store performance in context</h2>
+  <p>I developed a grading approach using market characteristics and store performance indicators. Individual indicators were grouped into five grades using Jenks natural breaks, then combined with weights into a composite grade.</p>
+  <p>Stores in the same composite grade formed comparison groups. This provided an interpretable starting point for reviewing stores with comparable overall scores; a shared grade does not imply identical neighborhood or customer profiles.</p>
+</section>
+<section id="delivery"><div class="section-number">06 / Delivery</div><h2>Turn analytical logic into a recurring service</h2>
+  <div class="delivery-grid"><div><h3>Analytical web service</h3><p>Catchment generation, market profiles, customer penetration, channel analysis, and store comparison in one reporting framework.</p></div>
+    <div><h3>Operational foundation</h3><p>Service table designs, aggregation specifications, analytical batch code, and scheduled processing.</p></div>
+    <div><h3>Handover materials</h3><p>A logic manual, final report, and handover documentation for continued operation.</p></div></div>
+  <p>The project extended the client’s analytical view from store totals to geographic and customer detail. My contribution connected the analytical definitions with the table structures and recurring processing needed to operate the service.</p>
+</section>
+<section id="considerations" class="case-considerations"><h2>Interpretation and limitations</h2>
+  <p>Catchments depend on the available street network and a fixed walking-speed assumption. Sparse-network filling and dominant-overlap block assignment simplify boundaries. Population-based penetration also requires compatible geography, age groups, and reporting periods; delivery addresses do not necessarily establish residence.</p>
+  <p>These considerations matter when interpreting the service’s geographic comparisons. The project documentation describes delivery of the service, without a quantified sales uplift or runtime benchmark.</p>
+</section>
+
+          <nav class="case-next" aria-label="More projects"><a class="back-link" href="../projects.html">← All projects</a><a class="text-link" href="market-segmentation.html">Tobacco Market Potential Analysis →</a></nav>
+        </article>
+        <aside class="case-sidebar" aria-label="Project navigation and tools">
+          <nav aria-label="On this page"><h2>On this page</h2><ol><li><a href="#overview">Overview &amp; my role</a></li><li><a href="#catchments">Catchment design</a></li><li><a href="#market">Market context</a></li><li><a href="#customers">Customer analytics</a></li><li><a href="#peers">Store comparison</a></li><li><a href="#delivery">Delivery</a></li><li><a href="#considerations">Interpretation</a></li></ol></nav>
+          <hr class="subtle-divider"><h2>Methods &amp; tools</h2><div class="chips"><span class="chip">Python</span><span class="chip">pandas</span><span class="chip">GeoPandas</span><span class="chip">OSMnx</span><span class="chip">NetworkX</span><span class="chip">scikit-learn</span><span class="chip">QGIS</span></div>
+          <a class="button repo-button" data-repo-button="retail-catchments" href="../projects.html" target="_blank" rel="noopener noreferrer" hidden>View GitHub repository ↗</a>
+          <a class="text-link" href="../work.html">Work experience ↗</a>
+          <a class="text-link" href="https://erratic-quit-c88.notion.site/Hypermarket-Analysis-Service-Catchment-Area-Creation-and-Analysis-cb6c7f701b8145dab5c608d310afeb70?pvs=143" target="_blank" rel="noopener noreferrer">Original Notion notes ↗</a>
+          <p class="case-source">Figures from my original project documentation.</p>
+        </aside>
+      </div>
+    </main><footer class="site-footer"><div class="wrap footer-inner"><span>© 2026 Jisun Kim</span><span>Data science. Thoughtfully applied.</span><a href="../index.html#contact">Get in touch ↗</a></div></footer>
+</body>
+</html>
