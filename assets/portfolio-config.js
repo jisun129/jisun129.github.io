@@ -5,7 +5,7 @@ window.PORTFOLIO = {
   email: "",
   github: "",
   linkedin: "",
-  photo: "",
+  photo: "assets/profile.png",
   repositories: {
     "california-housing": "",
     "clinical-code-prediction": "",
