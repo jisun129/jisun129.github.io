@@ -410,6 +410,7 @@ p {
    margin-left: 6px; 
    font-size: 12px; 
    color: var(--muted); 
+   font-weight: normal; 
 }
 
 /* 08. Home: summary strip & previews
