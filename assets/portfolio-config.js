@@ -1,6 +1,4 @@
-/* EDIT HERE: Add your real contact details, photo, and GitHub repository URLs.
-   Empty values keep the honest placeholders and working project detail links.
-   Use paths relative to the website root, e.g. assets/portrait.jpg. */
+
 window.PORTFOLIO = {
   email: "kim02668@umn.edu",
   github: "wwww.github.com/jisun129",
