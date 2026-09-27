@@ -1,8 +1,8 @@
 
 window.PORTFOLIO = {
   email: "kim02668@umn.edu",
-  github: "wwww.github.com/jisun129",
-  linkedin: "wwww.linkedin.com/in/jisun-kim-jade",
+  github: "https://wwww.github.com/jisun129",
+  linkedin: "https://wwww.linkedin.com/in/jisun-kim-jade",
   photo: "assets/profile.png",
   repositories: {
     "california-housing": "",
