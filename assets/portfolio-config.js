@@ -2,9 +2,9 @@
    Empty values keep the honest placeholders and working project detail links.
    Use paths relative to the website root, e.g. assets/portrait.jpg. */
 window.PORTFOLIO = {
-  email: "",
-  github: "",
-  linkedin: "",
+  email: "kim02668@umn.edu",
+  github: "wwww.github.com/jisun129",
+  linkedin: "wwww.linkedin.com/in/jisun-kim-jade",
   photo: "assets/profile.png",
   repositories: {
     "california-housing": "",
